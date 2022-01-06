@@ -1,0 +1,4 @@
+.idea/
+.ipynb_checkpoints/
+src/colour_to_dmc.egg-info/
+src/colour_to_dmc/__pycache__/
