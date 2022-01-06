@@ -23,7 +23,7 @@ unique_bgr_array = np.unique(bgr_tuple_array, axis=0)
 dmc_colours = [(rgb_to_dmc(c[2], c[1], c[0])) for c in unique_bgr_array]
 
 # dedupe colour_list
-unique_dmc_colours = [dict(t) for t in {tuple(d.items()) for d in dmc_colours}] 
+unique_dmc_colours = [dict(t) for t in {tuple(d.items()) for d in dmc_colours}]
 
 # get a list of all floss/thread occurrences from the dmc_colours
 seq = [x['floss'] for x in dmc_colours]
