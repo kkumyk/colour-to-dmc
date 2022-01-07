@@ -1,6 +1,9 @@
 import cv2
+import pandas as pd
 import numpy as np
 from colours import rgb_to_dmc
+from collections import Counter
+import matplotlib.pyplot as plt
 
 # returns a nested array of lists with B, G, R colours present in an image
 image = cv2.imread('flowers.png')
@@ -26,7 +29,36 @@ dmc_colours = [(rgb_to_dmc(c[2], c[1], c[0])) for c in unique_bgr_array]
 unique_dmc_colours = [dict(t) for t in {tuple(d.items()) for d in dmc_colours}]
 
 # get a list of all floss/thread occurrences from the dmc_colours
-seq = [x['floss'] for x in dmc_colours]
-print(seq)
+floss_seq = [x['floss'] for x in dmc_colours]
+
+# https://docs.python.org/3/library/collections.html#collections.Counter
+# count floss occurrences found
+floss_counts = Counter(floss_seq)
+
+# calculate the use percentage of each floss
+floss_use_percentage = [
+    (i, floss_counts[i] / len(dmc_colours) * 100.0)
+    for i in floss_counts]
+
+limit_low_occurring_threads = 2  # %
+filtered_floss_list = [
+    color for color in floss_use_percentage if color[1] > limit_low_occurring_threads
+]
+filtered_floss_df = pd.DataFrame(filtered_floss_list).rename(columns={0: 'floss', 1: '%'})
+
+unique_dmc_df = pd.DataFrame(unique_dmc_colours)
+unique_dmc_df[["floss", "description"]]
+
+merged_colours = pd.merge(filtered_floss_df, unique_dmc_df, how="left", on="floss").sort_values('%', ascending=False)
+dmc_palette = merged_colours[["floss", "description", "red", "green", "blue", "%"]]
+
+print(dmc_palette)
+# get the list of rgb combinations for each
+# http://net-informations.com/ds/pd/iterate.htm
+rgb_palette = [[x, y, z] for x, y, z in zip(dmc_palette['red'], dmc_palette['green'], dmc_palette['blue'])]
+
+
+plt.imshow([rgb_palette])
+plt.show()
 
 
