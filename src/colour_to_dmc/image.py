@@ -6,7 +6,7 @@ from collections import Counter
 import matplotlib.pyplot as plt
 
 # returns a nested array of lists with B, G, R colours present in an image
-image = cv2.imread('flowers.png')
+image = cv2.imread('ro.jpeg') # flowers.png'
 
 # we can access this colour combination by x,y position
 # b, g, r = image[80,160]
@@ -40,11 +40,15 @@ floss_use_percentage = [
     (i, floss_counts[i] / len(dmc_colours) * 100.0)
     for i in floss_counts]
 
-limit_low_occurring_threads = 2  # %
+limit_low_occurring_threads = 1.8  # %
 filtered_floss_list = [
     color for color in floss_use_percentage if color[1] > limit_low_occurring_threads
 ]
-print('Number of most used threads: ', len(filtered_floss_list))
+
+# https://www.kite.com/python/answers/how-to-sort-a-list-of-tuples-by-the-second-value-in-python
+filtered_floss_list.sort(key=lambda x:x[1])
+
+print('Number of most used threads: ', filtered_floss_list)
 
 filtered_floss_df = pd.DataFrame(filtered_floss_list).rename(columns={0: 'floss', 1: '%'})
 
@@ -69,23 +73,29 @@ _, w, _ = image.shape
 size = int(w / len(filtered_floss_list))
 y = size
 
-#
-# print("DMC COLORS", dmc_colors)
-#
-# for idx, color in enumerate(filtered_floss_list):
-#     b, g, r = (
-#         dmc_colors[color[0]]["blue"],
-#         dmc_colors[color[0]]["green"],
-#         dmc_colors[color[0]]["red"],
-#     )
-#     cv2.rectangle(
-#         image, (size * idx, 0), ((size * idx) + size, size), (b, g, r), -1
-#     )
-#
-#
-# print('Size: ', size)
-#
-# print('Image width: ', w)
-#
-# cv2.rectangle(image,(384,0),(510,128),(0,255,0),3)
+print("DMC COLORS", dmc_colors)
+print("FILTERED FLOSS LIST", filtered_floss_list)
+test_dmc_thread_dict = {dmc_color['floss']: dmc_color for dmc_color in dmc_colors}
+print("TEST DMC THREAD DICTIONARY", test_dmc_thread_dict)
 
+for idx, color in enumerate(filtered_floss_list):
+    b, g, r = (
+        test_dmc_thread_dict[color[0]]["blue"],
+        test_dmc_thread_dict[color[0]]["green"],
+        test_dmc_thread_dict[color[0]]["red"],
+    )
+    print(color[0], r, g, b)
+    cv2.rectangle(
+        image, (size * idx, 0), ((size * idx) + size, size), (b, g, r), -1
+    )
+
+    cv2.imwrite('palette.jpg', image)
+
+# cv2.imshow('image', image)
+# cv2.waitKey()
+# cv2.destroyAllWindows()
+
+
+# print('Size: ', size)
+# print('Image width: ', w)
+# cv2.rectangle(image,(384,0),(510,128),(0,255,0),3)
