@@ -6,18 +6,34 @@ from collections import Counter
 import matplotlib.pyplot as plt
 
 # returns a nested array of lists with B, G, R colours present in an image
-image = cv2.imread('ro.jpeg') # flowers.png'
+# image = cv2.imread('ro.jpeg') # flowers.png'
 
-original_image = cv2.imread('roses.jpeg') # flowers.png'
+original_image = cv2.imread('roses.jpeg')  # flowers.png'
+
+
+def get_scaled_down_image(image):
+    MAXWIDTH, MAXHEIGHT = 400, 400
+    w = MAXWIDTH / image.shape[1]
+    h = MAXHEIGHT / image.shape[0]
+    scale = min(w, h)
+    dim = (int(image.shape[1] * scale), int(image.shape[0] * scale))
+    return cv2.resize(image, dim)
+
+
+scaled_down_image = get_scaled_down_image(original_image)
+
+# print(scaled_down_image)
+# cv2.imwrite('scaled_down_image.jpg', scaled_down_image)
+
 
 # we can access this colour combination by x,y position
 # b, g, r = image[80,160]
 # print(b, g, r)
 
 # flatten the array by concatenating the lists:
-bgr_concat_array = np.concatenate(image, axis=0)
+bgr_concat_array = np.concatenate(scaled_down_image, axis=0)
 
-# return unique B, G, R colour combination of an image by:
+# return unique B, G, R colour combination of an scaled_down_image by:
 # 1. turning lists into tuples and
 # 2. using the unique() function to find the unique elements of an array.
 
@@ -25,7 +41,7 @@ bgr_tuple_array = [tuple(row) for row in bgr_concat_array]
 unique_bgr_array = np.unique(bgr_tuple_array, axis=0)
 
 # find the closest dmc colour using unique bgr values in the unique_bgr_array
-dmc_colours = [(rgb_to_dmc(c[2], c[1], c[0])) for c in unique_bgr_array] # RENAME the variable
+dmc_colours = [(rgb_to_dmc(c[2], c[1], c[0])) for c in unique_bgr_array]  # RENAME the variable
 
 # dedupe colour_list
 unique_dmc_colours = [dict(t) for t in {tuple(d.items()) for d in dmc_colours}]
@@ -48,7 +64,7 @@ filtered_floss_list = [
 ]
 
 # https://www.kite.com/python/answers/how-to-sort-a-list-of-tuples-by-the-second-value-in-python
-filtered_floss_list.sort(key=lambda x:x[1])
+filtered_floss_list.sort(key=lambda x: x[1])
 
 print('Number of most used threads: ', filtered_floss_list)
 
@@ -60,7 +76,6 @@ unique_dmc_df = pd.DataFrame(unique_dmc_colours)
 merged_colours = pd.merge(filtered_floss_df, unique_dmc_df, how="left", on="floss").sort_values('%', ascending=False)
 dmc_palette = merged_colours[["floss", "description", "red", "green", "blue", "%"]]
 
-
 print("DMC Palette", dmc_palette)
 
 # get the list of rgb combinations for each
@@ -70,7 +85,7 @@ rgb_palette = [[x, y, z] for x, y, z in zip(dmc_palette['red'], dmc_palette['gre
 plt.imshow([rgb_palette])
 # plt.show()
 
-# overlay the color palette on top of the image
+# overlay the color palette on top of the original image
 _, w, _ = original_image.shape
 size = int(w / len(filtered_floss_list))
 y = size
@@ -102,7 +117,6 @@ for idx, color in enumerate(filtered_floss_list):
         (255 - b, 255 - g, 255 - r),
         1,
     )
-
 
     cv2.imwrite('palette.jpg', original_image)
 
