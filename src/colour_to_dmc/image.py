@@ -8,6 +8,8 @@ import matplotlib.pyplot as plt
 # returns a nested array of lists with B, G, R colours present in an image
 image = cv2.imread('ro.jpeg') # flowers.png'
 
+original_image = cv2.imread('roses.jpeg') # flowers.png'
+
 # we can access this colour combination by x,y position
 # b, g, r = image[80,160]
 # print(b, g, r)
@@ -40,7 +42,7 @@ floss_use_percentage = [
     (i, floss_counts[i] / len(dmc_colours) * 100.0)
     for i in floss_counts]
 
-limit_low_occurring_threads = 1.8  # %
+limit_low_occurring_threads = 1.5  # %
 filtered_floss_list = [
     color for color in floss_use_percentage if color[1] > limit_low_occurring_threads
 ]
@@ -69,9 +71,11 @@ plt.imshow([rgb_palette])
 # plt.show()
 
 # overlay the color palette on top of the image
-_, w, _ = image.shape
+_, w, _ = original_image.shape
 size = int(w / len(filtered_floss_list))
 y = size
+
+print("Y IS: ", y)
 
 print("DMC COLORS", dmc_colors)
 print("FILTERED FLOSS LIST", filtered_floss_list)
@@ -86,10 +90,21 @@ for idx, color in enumerate(filtered_floss_list):
     )
     print(color[0], r, g, b)
     cv2.rectangle(
-        image, (size * idx, 0), ((size * idx) + size, size), (b, g, r), -1
+        original_image, (size * idx, 0), ((size * idx) + size, size), (b, g, r), -1
     )
 
-    cv2.imwrite('palette.jpg', image)
+    cv2.putText(
+        original_image,
+        test_dmc_thread_dict[color[0]]["floss"],
+        (size * idx, size - 7),
+        cv2.FONT_HERSHEY_SIMPLEX,
+        0.5,
+        (255 - b, 255 - g, 255 - r),
+        1,
+    )
+
+
+    cv2.imwrite('palette.jpg', original_image)
 
 # cv2.imshow('image', image)
 # cv2.waitKey()
