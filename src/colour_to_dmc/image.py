@@ -8,11 +8,11 @@ import matplotlib.pyplot as plt
 # returns a nested array of lists with B, G, R colours present in an image
 # image = cv2.imread('ro.jpeg') # flowers.png'
 
-original_image = cv2.imread('roses.jpeg')  # flowers.png'
+original_image = cv2.imread('roses.jpeg')
 
 
 def get_scaled_down_image(image):
-    MAXWIDTH, MAXHEIGHT = 400, 400
+    MAXWIDTH, MAXHEIGHT = 10, 10
     w = MAXWIDTH / image.shape[1]
     h = MAXHEIGHT / image.shape[0]
     scale = min(w, h)
@@ -20,7 +20,11 @@ def get_scaled_down_image(image):
     return cv2.resize(image, dim)
 
 
+
 scaled_down_image = get_scaled_down_image(original_image)
+
+
+# cv2.imwrite('scaled_down_image.jpg', scaled_down_image)
 
 # print(scaled_down_image)
 # cv2.imwrite('scaled_down_image.jpg', scaled_down_image)
@@ -52,21 +56,20 @@ floss_seq = [x['floss'] for x in dmc_colours]
 # https://docs.python.org/3/library/collections.html#collections.Counter
 # count floss occurrences found
 floss_counts = Counter(floss_seq)
-
+print("TOTAL NUMBER OF FLOSS THREADS FOUND: ", len(floss_counts))
 # calculate the use percentage of each floss
 floss_use_percentage = [
     (i, floss_counts[i] / len(dmc_colours) * 100.0)
     for i in floss_counts]
 
-limit_low_occurring_threads = 1.5  # %
+limit_low_occurring_threads = 1 # %
 filtered_floss_list = [
-    color for color in floss_use_percentage if color[1] > limit_low_occurring_threads
-]
+    color for color in floss_use_percentage if color[1] > limit_low_occurring_threads]
 
 # https://www.kite.com/python/answers/how-to-sort-a-list-of-tuples-by-the-second-value-in-python
 filtered_floss_list.sort(key=lambda x: x[1])
 
-print('Number of most used threads: ', filtered_floss_list)
+print('Number of most used threads: ', len(filtered_floss_list))
 
 filtered_floss_df = pd.DataFrame(filtered_floss_list).rename(columns={0: 'floss', 1: '%'})
 
@@ -86,8 +89,12 @@ plt.imshow([rgb_palette])
 # plt.show()
 
 # overlay the color palette on top of the original image
-_, w, _ = original_image.shape
-size = int(w / len(filtered_floss_list))
+# _, w, _ = original_image.shape
+# size = int(w / len(filtered_floss_list))
+
+h, _, _ = original_image.shape
+size = int(h / len(filtered_floss_list))
+
 y = size
 
 print("Y IS: ", y)
@@ -105,13 +112,14 @@ for idx, color in enumerate(filtered_floss_list):
     )
     print(color[0], r, g, b)
     cv2.rectangle(
-        original_image, (size * idx, 0), ((size * idx) + size, size), (b, g, r), -1
-    )
+        # thickness: It is the thickness of the rectangle border line in px. Thickness of -1 px will fill the rectangle shape by the specified color.
+        #original_image, (size * idx, 0), ((size * idx) + size, size), (b, g, r), -1)
+        original_image, (0, size * idx), (size*2, (size * idx) + size), (b, g, r), -1)
 
     cv2.putText(
         original_image,
         test_dmc_thread_dict[color[0]]["floss"],
-        (size * idx, size - 7),
+        (0, size * idx + (int(size/2))),
         cv2.FONT_HERSHEY_SIMPLEX,
         0.5,
         (255 - b, 255 - g, 255 - r),
@@ -119,12 +127,3 @@ for idx, color in enumerate(filtered_floss_list):
     )
 
     cv2.imwrite('palette.jpg', original_image)
-
-# cv2.imshow('image', image)
-# cv2.waitKey()
-# cv2.destroyAllWindows()
-
-
-# print('Size: ', size)
-# print('Image width: ', w)
-# cv2.rectangle(image,(384,0),(510,128),(0,255,0),3)
