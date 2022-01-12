@@ -17,6 +17,7 @@ def get_scaled_down_image(image):
     dim = (int(image.shape[1] * scale), int(image.shape[0] * scale))
     return cv2.resize(image, dim)
 
+
 scaled_down_image = get_scaled_down_image(original_image)
 # we can access this colour combination by x,y position
 # b, g, r = image[80,160]
@@ -65,17 +66,18 @@ unique_dmc_df = pd.DataFrame(unique_dmc_colours)
 merged_colours = pd.merge(filtered_floss_df, unique_dmc_df, how="left", on="floss").sort_values('%', ascending=False)
 dmc_palette = merged_colours[["floss", "description", "red", "green", "blue", "%", "dmc_row"]]
 dmc_palette_dmc_row = dmc_palette.sort_values(by=['dmc_row'])
-#print(dmc_palette_dmc_row)
+print(dmc_palette_dmc_row)
 
 sorted_floss = dmc_palette_dmc_row['floss'].to_list()
-
 
 # get the list of rgb combinations for each
 # http://net-informations.com/ds/pd/iterate.htm
 # rgb_palette = [[x, y, z] for x, y, z in zip(dmc_palette['red'], dmc_palette['green'], dmc_palette['blue'])]
 
-rgb_palette = [[x, y, z] for x, y, z in zip(dmc_palette_dmc_row['red'], dmc_palette_dmc_row['green'], dmc_palette_dmc_row['blue'])]
+rgb_palette = [[x, y, z] for x, y, z in
+               zip(dmc_palette_dmc_row['red'], dmc_palette_dmc_row['green'], dmc_palette_dmc_row['blue'])]
 
+print("RGB-PALETTE", rgb_palette)
 # overlay the color palette on top of the original image
 # _, w, _ = original_image.shape
 # size = int(w / len(filtered_floss_list))
@@ -90,19 +92,16 @@ print("sorted_floss", sorted_floss)
 
 sorted_filtered_floss_list = sorted(filtered_floss_list, key=lambda item: sorted_floss.index(item[0]))
 
-
-test_dmc_thread_dict = {dmc_color['floss']: dmc_color for dmc_color in dmc_colors} # csv data saved to dict
-
+test_dmc_thread_dict = {dmc_color['floss']: dmc_color for dmc_color in dmc_colors}  # csv data saved to dict
 
 for idx, color in enumerate(sorted_filtered_floss_list):
     b, g, r = (
         test_dmc_thread_dict[color[0]]["blue"],
         test_dmc_thread_dict[color[0]]["green"],
         test_dmc_thread_dict[color[0]]["red"]
-        #test_dmc_thread_dict[color[0]]["dmc_row"]
     )
 
-    #print(color[0], r, g, b)
+    # print(color[0], r, g, b)
     cv2.rectangle(
         # thickness: It is the thickness of the rectangle border line in px. Thickness of -1 px will fill the rectangle shape by the specified color.
         # original_image, (size * idx, 0), ((size * idx) + size, size), (b, g, r), -1)
@@ -117,5 +116,29 @@ for idx, color in enumerate(sorted_filtered_floss_list):
         (255 - b, 255 - g, 255 - r),
         1,
     )
-6
+
 cv2.imwrite('palette.jpg', original_image)
+
+
+# Task: get the closest colour alternative from the unique colours.
+def closest(colors, color):
+    filtered = [i for i in colors if i != color]
+    print(len(filtered))
+
+    filtered = np.array(filtered)
+    color = np.array(color)
+    distances = np.sqrt(np.sum((filtered - color) ** 2, axis=1))
+    index_of_smallest = np.where(distances == np.amin(distances))
+    smallest_distance = filtered[index_of_smallest]
+    return smallest_distance
+
+color = [167, 19, 43]
+
+
+closest_color = closest(rgb_palette, color)
+print(closest_color)
+
+
+
+# https://stackoverflow.com/questions/54242194/python-find-the-closest-color-to-a-color-from-giving-list-of-colors
+# https://i0.wp.com/lordlibidan.com/wp-content/uploads/2021/11/DMCThreadshadecardwithnewcolors.png?ssl=1
