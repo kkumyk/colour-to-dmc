@@ -6,8 +6,6 @@ from collections import Counter
 import matplotlib.pyplot as plt
 
 # returns a nested array of lists with B, G, R colours present in an image
-# image = cv2.imread('ro.jpeg') # flowers.png'
-
 original_image = cv2.imread('roses.jpeg')
 
 
@@ -19,25 +17,13 @@ def get_scaled_down_image(image):
     dim = (int(image.shape[1] * scale), int(image.shape[0] * scale))
     return cv2.resize(image, dim)
 
-
-
 scaled_down_image = get_scaled_down_image(original_image)
-
-
-# cv2.imwrite('scaled_down_image.jpg', scaled_down_image)
-
-# print(scaled_down_image)
-# cv2.imwrite('scaled_down_image.jpg', scaled_down_image)
-
-
 # we can access this colour combination by x,y position
 # b, g, r = image[80,160]
 # print(b, g, r)
-
 # flatten the array by concatenating the lists:
 bgr_concat_array = np.concatenate(scaled_down_image, axis=0)
-
-# return unique B, G, R colour combination of an scaled_down_image by:
+# return unique B, G, R colour combination of a scaled_down_image by:
 # 1. turning lists into tuples and
 # 2. using the unique() function to find the unique elements of an array.
 
@@ -62,31 +48,33 @@ floss_use_percentage = [
     (i, floss_counts[i] / len(dmc_colours) * 100.0)
     for i in floss_counts]
 
-limit_low_occurring_threads = 1 # %
+limit_low_occurring_threads = 1  # %
 filtered_floss_list = [
     color for color in floss_use_percentage if color[1] > limit_low_occurring_threads]
+
+print("NOT_SORTED_filtered_floss_list", filtered_floss_list)
+
+# filtered_floss_list_first = filtered_floss_list.sort(key=lambda x:x[0])
+# print("filtered_floss_list_first", filtered_floss_list_first)
 
 # https://www.kite.com/python/answers/how-to-sort-a-list-of-tuples-by-the-second-value-in-python
 filtered_floss_list.sort(key=lambda x: x[1])
 
-print('Number of most used threads: ', len(filtered_floss_list))
-
 filtered_floss_df = pd.DataFrame(filtered_floss_list).rename(columns={0: 'floss', 1: '%'})
-
 unique_dmc_df = pd.DataFrame(unique_dmc_colours)
-# unique_dmc_df[["floss", "description"]]
-
 merged_colours = pd.merge(filtered_floss_df, unique_dmc_df, how="left", on="floss").sort_values('%', ascending=False)
-dmc_palette = merged_colours[["floss", "description", "red", "green", "blue", "%"]]
+dmc_palette = merged_colours[["floss", "description", "red", "green", "blue", "%", "dmc_row"]]
+dmc_palette_dmc_row = dmc_palette.sort_values(by=['dmc_row'])
+#print(dmc_palette_dmc_row)
 
-print("DMC Palette", dmc_palette)
+sorted_floss = dmc_palette_dmc_row['floss'].to_list()
+
 
 # get the list of rgb combinations for each
 # http://net-informations.com/ds/pd/iterate.htm
-rgb_palette = [[x, y, z] for x, y, z in zip(dmc_palette['red'], dmc_palette['green'], dmc_palette['blue'])]
+# rgb_palette = [[x, y, z] for x, y, z in zip(dmc_palette['red'], dmc_palette['green'], dmc_palette['blue'])]
 
-plt.imshow([rgb_palette])
-# plt.show()
+rgb_palette = [[x, y, z] for x, y, z in zip(dmc_palette_dmc_row['red'], dmc_palette_dmc_row['green'], dmc_palette_dmc_row['blue'])]
 
 # overlay the color palette on top of the original image
 # _, w, _ = original_image.shape
@@ -94,36 +82,40 @@ plt.imshow([rgb_palette])
 
 h, _, _ = original_image.shape
 size = int(h / len(filtered_floss_list))
-
 y = size
-
-print("Y IS: ", y)
-
-print("DMC COLORS", dmc_colors)
+# print("Y IS: ", y)
+# print("DMC COLORS", dmc_colors)
 print("FILTERED FLOSS LIST", filtered_floss_list)
-test_dmc_thread_dict = {dmc_color['floss']: dmc_color for dmc_color in dmc_colors}
-print("TEST DMC THREAD DICTIONARY", test_dmc_thread_dict)
+print("sorted_floss", sorted_floss)
 
-for idx, color in enumerate(filtered_floss_list):
+sorted_filtered_floss_list = sorted(filtered_floss_list, key=lambda item: sorted_floss.index(item[0]))
+
+
+test_dmc_thread_dict = {dmc_color['floss']: dmc_color for dmc_color in dmc_colors} # csv data saved to dict
+
+
+for idx, color in enumerate(sorted_filtered_floss_list):
     b, g, r = (
         test_dmc_thread_dict[color[0]]["blue"],
         test_dmc_thread_dict[color[0]]["green"],
-        test_dmc_thread_dict[color[0]]["red"],
+        test_dmc_thread_dict[color[0]]["red"]
+        #test_dmc_thread_dict[color[0]]["dmc_row"]
     )
-    print(color[0], r, g, b)
+
+    #print(color[0], r, g, b)
     cv2.rectangle(
         # thickness: It is the thickness of the rectangle border line in px. Thickness of -1 px will fill the rectangle shape by the specified color.
-        #original_image, (size * idx, 0), ((size * idx) + size, size), (b, g, r), -1)
-        original_image, (0, size * idx), (size*2, (size * idx) + size), (b, g, r), -1)
+        # original_image, (size * idx, 0), ((size * idx) + size, size), (b, g, r), -1)
+        original_image, (0, size * idx), (size * 2, (size * idx) + size), (b, g, r), -1)
 
     cv2.putText(
         original_image,
         test_dmc_thread_dict[color[0]]["floss"],
-        (0, size * idx + (int(size/2))),
+        (0, size * idx + (int(size / 2))),
         cv2.FONT_HERSHEY_SIMPLEX,
         0.5,
         (255 - b, 255 - g, 255 - r),
         1,
     )
-
-    cv2.imwrite('palette.jpg', original_image)
+6
+cv2.imwrite('palette.jpg', original_image)
