@@ -18,6 +18,7 @@ with open(DMC_CSV, newline="") as csvfile:
                 "blue": int(row["blue"]),
                 "hex": "#" + row["hex"],
                 "dmc_row": row["row"],
+                "prim_sec_ter": row["prim-sec-ter"]
             }
         )
 
@@ -36,5 +37,6 @@ def rgb_to_dmc(r, g, b):
     _, dmc_thread = tree.query((r, g, b))
     return dmc_colors[dmc_thread]
 
-
 print(rgb_to_dmc(241, 195, 107))
+
+
