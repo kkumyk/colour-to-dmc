@@ -15,20 +15,23 @@ cv2.imwrite('quantized_image.jpg', quantized_image)
 
 
 def get_scaled_down_image(image):
-    MAXWIDTH, MAXHEIGHT = 10, 10
+    MAXWIDTH, MAXHEIGHT = 400, 400
     w = MAXWIDTH / image.shape[1]
     h = MAXHEIGHT / image.shape[0]
     scale = min(w, h)
     dim = (int(image.shape[1] * scale), int(image.shape[0] * scale))
     return cv2.resize(image, dim)
 
-
+# scale down the original and the quantized images
 scaled_down_image = get_scaled_down_image(original_image)
+scaled_down_quantized_image = get_scaled_down_image(quantized_image)
 # we can access this colour combination by x,y position
 # b, g, r = image[80,160]
 # print(b, g, r)
 # flatten the array by concatenating the lists:
 bgr_concat_array = np.concatenate(scaled_down_image, axis=0)
+bgr_concat_quantized_array = np.concatenate(scaled_down_quantized_image, axis=0)
+
 # return unique B, G, R colour combination of a scaled_down_image by:
 # 1. turning lists into tuples and
 # 2. using the unique() function to find the unique elements of an array.
