@@ -23,8 +23,8 @@ with open(DMC_CSV, newline="") as csvfile:
         )
 
 rgb_colours = []
-for color in dmc_threads:
-    rgb_colours.append((color["red"], color["green"], color["blue"]))
+for colour in dmc_threads:
+    rgb_colours.append((colour["red"], colour["green"], colour["blue"]))
 
 print(dmc_threads)
 print(rgb_colours)
