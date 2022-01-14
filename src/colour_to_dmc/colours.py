@@ -22,16 +22,16 @@ with open(DMC_CSV, newline="") as csvfile:
             }
         )
 
-rgb_colors = []
+rgb_colours = []
 for color in dmc_threads:
-    rgb_colors.append((color["red"], color["green"], color["blue"]))
+    rgb_colours.append((color["red"], color["green"], color["blue"]))
 
 print(dmc_threads)
-print(rgb_colors)
+print(rgb_colours)
 
 # look up the nearest neighbors with k-d tree
 def rgb_to_dmc(r, g, b):
-    tree = sp.KDTree(rgb_colors)
+    tree = sp.KDTree(rgb_colours)
     # don't need the Euclidean distance only the index
     _, dmc_thread = tree.query((r, g, b))
     return dmc_threads[dmc_thread]
