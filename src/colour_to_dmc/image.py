@@ -1,12 +1,12 @@
 import cv2
-import pandas as pd
 import numpy as np
-
 from colours import rgb_to_dmc, dmc_threads
 from collections import Counter
+from cli import input_image, output_image
 
 # returns a nested array of lists with B, G, R colours present in an image
-original_image = cv2.imread('roses.jpeg')
+# original_image = cv2.imread('roses.jpeg')
+original_image = cv2.imread(input_image)
 
 
 # original_image = cv2.imread('Mark-Liam-Smith-Scarab-Beetle-Oil-on-panel-2021-16x12.jpg')
@@ -96,4 +96,5 @@ for idx, color in enumerate(filtered_thread_list):
         1,
     )
 
-cv2.imwrite('palette.jpg', original_image)
+    cv2.imwrite(output_image, original_image)
+
