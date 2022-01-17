@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 from colours import rgb_to_dmc, dmc_threads
 from collections import Counter
-from cli import input_image, output_image
+from cli import input_image, output_image, div
 
 # returns a nested array of lists with B, G, R colours present in an image
 # original_image = cv2.imread('roses.jpeg')
@@ -12,8 +12,9 @@ original_image = cv2.imread(input_image)
 # original_image = cv2.imread('Mark-Liam-Smith-Scarab-Beetle-Oil-on-panel-2021-16x12.jpg')
 # original_image = cv2.imread('Jan_Frans_van_Dael.jpg')
 
+
 # https://stackoverflow.com/a/20715062
-def quantize_image(image, div=32):
+def quantize_image(image, div):
     """
     Reduces the number of distinct colors used in an image.
     """
@@ -23,7 +24,8 @@ def quantize_image(image, div=32):
 
 # reduce the number of distinct colors in an image
 # while preserving the color appearance of the image as much as possible
-reduced_color_image = quantize_image(original_image)
+
+reduced_color_image = quantize_image(original_image, div)
 # cv2.imwrite('quantized_image_test.jpg', reduced_color_image)
 
 # we can access this colour combination by x,y position
@@ -97,4 +99,3 @@ for idx, color in enumerate(filtered_thread_list):
     )
 
     cv2.imwrite(output_image, original_image)
-
