@@ -2,36 +2,16 @@ import cv2
 import numpy as np
 from colours import rgb_to_dmc, dmc_threads
 from collections import Counter
-from cli import input_image, output_image, div
-
-# returns a nested array of lists with B, G, R colours present in an image
-# original_image = cv2.imread('roses.jpeg')
-original_image = cv2.imread(input_image)
+from cli import input_image, output_image
+from PIL import Image
 
 
-# original_image = cv2.imread('Mark-Liam-Smith-Scarab-Beetle-Oil-on-panel-2021-16x12.jpg')
-# original_image = cv2.imread('Jan_Frans_van_Dael.jpg')
+# quantize an image
+im1 = Image.open(r"/home/karina/PycharmProjects/colour_to_dmc/src/colour_to_dmc/roses.jpeg")
+reduced_color = im1.quantize(256)
+reduced_color.save('reduced_color.png')
 
-
-# https://stackoverflow.com/a/20715062
-def quantize_image(image, div):
-    """
-    Reduces the number of distinct colors used in an image.
-    """
-    quantized = image // div * div + div // 2
-    return quantized
-
-
-# reduce the number of distinct colors in an image
-# while preserving the color appearance of the image as much as possible
-
-reduced_color_image = quantize_image(original_image, div)
-# cv2.imwrite('quantized_image_test.jpg', reduced_color_image)
-
-# we can access this colour combination by x,y position
-# b, g, r = image[80,160]
-# print(b, g, r)
-
+reduced_color_image = cv2.imread('reduced_color.png')
 # flatten the array by concatenating the lists:
 bgr_concat_array = np.concatenate(reduced_color_image, axis=0)
 
@@ -60,7 +40,7 @@ thread_percentages = [
     (i, thread_counts[i] / len(closest_dmc_colours) * 100.0)
     for i in thread_counts]
 
-limit_low_occurring_threads = 1  # %
+limit_low_occurring_threads = 0.5  # %
 
 filtered_thread_list = [
     thread for thread in thread_percentages if thread[1] > limit_low_occurring_threads]
@@ -68,7 +48,7 @@ filtered_thread_list = [
 print("NOT-FILTERED", len(thread_percentages))
 print("FILTERED", len(filtered_thread_list))
 
-h, _, _ = original_image.shape
+h, _, _ = reduced_color_image.shape
 size = int(h / len(filtered_thread_list))
 y = size
 print("FILTERED FLOSS LIST", filtered_thread_list)
@@ -86,10 +66,10 @@ for idx, color in enumerate(filtered_thread_list):
     cv2.rectangle(
         # thickness: It is the thickness of the rectangle borderline in px.
         # Thickness of -1 px will fill the rectangle shape by the specified color.
-        original_image, (0, size * idx), (size * 2, (size * idx) + size), (b, g, r), -1)
+        reduced_color_image, (0, size * idx), (size * 2, (size * idx) + size), (b, g, r), -1)
 
     cv2.putText(
-        original_image,
+        reduced_color_image,
         dmc_thread_dict[color[0]]["floss"],
         (0, size * idx + (int(size / 2))),
         cv2.FONT_HERSHEY_SIMPLEX,
@@ -98,4 +78,4 @@ for idx, color in enumerate(filtered_thread_list):
         1,
     )
 
-    cv2.imwrite(output_image, original_image)
+    cv2.imwrite(output_image, reduced_color_image)

@@ -1,7 +1,6 @@
 import csv
 from scipy import spatial as sp
 
-
 DMC_CSV = "dmc.csv"
 
 dmc_threads = []
@@ -29,6 +28,7 @@ for colour in dmc_threads:
 print(dmc_threads)
 print(rgb_colours)
 
+
 # look up the nearest neighbors with k-d tree
 def rgb_to_dmc(r, g, b):
     tree = sp.KDTree(rgb_colours)
@@ -36,6 +36,5 @@ def rgb_to_dmc(r, g, b):
     _, dmc_thread = tree.query((r, g, b))
     return dmc_threads[dmc_thread]
 
+
 print(rgb_to_dmc(241, 195, 107))
-
-

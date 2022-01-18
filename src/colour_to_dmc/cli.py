@@ -21,6 +21,4 @@ args = parser.parse_args()
 
 input_image = args.input
 output_image = args.output
-div = args.div
-
 
