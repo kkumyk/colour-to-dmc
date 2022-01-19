@@ -13,6 +13,7 @@ parser.add_argument(
 
 parser.add_argument(
     "-p", "--percent",
+    type=int,
     default=1,
     help="percent number to use for filtering identified colours",
     required=False
