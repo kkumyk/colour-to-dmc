@@ -3,17 +3,14 @@ import argparse, image
 parser = argparse.ArgumentParser(
     description="Get a DMC colour palette for an image."
 )
+
+# specify the image size to be given for the input
 parser.add_argument("input", help="an input file")
+
 parser.add_argument(
     "-o", "--output",
     default='palette.jpg',
     help="an output file",
-    required=False
-)
-parser.add_argument(
-    "-d", "--div",
-    type=int,
-    default=64,
     required=False
 )
 
