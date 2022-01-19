@@ -1,3 +1,4 @@
+import os
 import cv2
 import numpy as np
 from colours import rgb_to_dmc, dmc_threads
@@ -5,10 +6,9 @@ from collections import Counter
 from cli import input_image, output_image
 from PIL import Image
 
-
 # quantize an image
-im1 = Image.open(r"/home/karina/PycharmProjects/colour_to_dmc/src/colour_to_dmc/roses.jpeg")
-reduced_color = im1.quantize(256)
+quantize_to_quantize = Image.open(input_image)
+reduced_color = quantize_to_quantize.quantize(256)
 reduced_color.save('reduced_color.png')
 
 reduced_color_image = cv2.imread('reduced_color.png')
@@ -79,3 +79,8 @@ for idx, color in enumerate(filtered_thread_list):
     )
 
     cv2.imwrite(output_image, reduced_color_image)
+
+# delete reduced colour image from the folder
+os.remove('reduced_color.png')
+
+# specify the image size to be given for the input
