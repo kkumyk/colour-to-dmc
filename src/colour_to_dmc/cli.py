@@ -19,8 +19,18 @@ parser.add_argument(
     required=False
 )
 
+# provide number of colours as an argument
+parser.add_argument(
+    "-n", "--number",
+    type=int,
+    default=255,
+    help="a number to use to reduce the image to the specified nr of colours",
+    required=False
+)
+
 args = parser.parse_args()
 input_image = args.input
 output_image = args.output
 percent = args.percent
+number = args.number
 

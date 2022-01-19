@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 from colours import rgb_to_dmc, dmc_threads
 from collections import Counter
-from cli import input_image, output_image, percent
+from cli import input_image, output_image, percent, number
 from PIL import Image
 
 # get the image
@@ -17,7 +17,7 @@ if width < 1000 or height < 1100:
     print("Please provide an image with a width of at least 1107px and a height of at least 1250px.")
     sys.exit("The provided image is too small.")
 else:
-    reduced_color = image_to_quantize.quantize(256)
+    reduced_color = image_to_quantize.quantize(number)
     reduced_color.save('reduced_color.png')
 
     reduced_color_image = cv2.imread('reduced_color.png')
@@ -92,8 +92,8 @@ else:
     # delete reduced colour image from the folder
     os.remove('reduced_color.png')
 """
-1. give % as cli arg
-2. give nr of colours as arg
+
+
 3. algo to print out not more than 50 colours.
 
 """
