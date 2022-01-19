@@ -1,10 +1,7 @@
 import argparse, image
 
-parser = argparse.ArgumentParser(
-    description="Get a DMC colour palette for an image."
-)
+parser = argparse.ArgumentParser(description="Get a DMC colour palette for an image.")
 
-# specify the image size to be given for the input
 parser.add_argument("input", help="an input file")
 
 parser.add_argument(
@@ -14,8 +11,15 @@ parser.add_argument(
     required=False
 )
 
-args = parser.parse_args()
+parser.add_argument(
+    "-p", "--percent",
+    default=1,
+    help="percent number to use for filtering identified colours",
+    required=False
+)
 
+args = parser.parse_args()
 input_image = args.input
 output_image = args.output
+percent = args.percent
 
