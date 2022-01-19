@@ -54,24 +54,32 @@ else:
     filtered_thread_list = [
         thread for thread in thread_percentages if thread[1] > limit_low_occurring_threads]
 
-    print("NOT-FILTERED", len(thread_percentages))
-    print("FILTERED", len(filtered_thread_list))
+    filtered_thread_list.sort(key=lambda x: x[1], reverse=True)
+
+    filtered_thread_list_50 = filtered_thread_list[0:50]
+    # print("NOT-FILTERED", len(thread_percentages))
+    # print("FILTERED", len(filtered_thread_list))
 
     h, _, _ = reduced_color_image.shape
-    size = int(h / len(filtered_thread_list))
-    y = size
-    # print("FILTERED FLOSS LIST", filtered_thread_list)
+
+    size = 0
+
+    if filtered_thread_list_50:
+        size += int(h / len(filtered_thread_list_50))
+        enum_filtered_thread_list = filtered_thread_list_50
+    else:
+        size += int(h / len(filtered_thread_list))
+        enum_filtered_thread_list = filtered_thread_list
 
     dmc_thread_dict = {dmc_thread['floss']: dmc_thread for dmc_thread in dmc_threads}  # csv data saved to dict
 
-    for idx, color in enumerate(filtered_thread_list):
+    for idx, color in enumerate(enum_filtered_thread_list):
         b, g, r = (
             dmc_thread_dict[color[0]]["blue"],
             dmc_thread_dict[color[0]]["green"],
             dmc_thread_dict[color[0]]["red"]
         )
 
-        # print(color[0], r, g, b)
         cv2.rectangle(
             # thickness: It is the thickness of the rectangle borderline in px.
             # Thickness of -1 px will fill the rectangle shape by the specified color.
@@ -91,9 +99,3 @@ else:
 
     # delete reduced colour image from the folder
     os.remove('reduced_color.png')
-"""
-
-
-3. algo to print out not more than 50 colours.
-
-"""
