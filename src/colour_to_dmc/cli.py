@@ -34,8 +34,8 @@ parser.add_argument(
 
 args = parser.parse_args()
 
-input_image = check_size_and_quantize(args.input, args.colours)
-input_image.save('reduced_colour_image.png')
+image_to_quantize = check_size_and_quantize(args.input, args.colours)
+image_to_quantize.save('reduced_colour_image.png')
 reduced_colour_image = cv2.imread('reduced_colour_image.png')
 
 dmc_threads_found = closest_unique_dmc_threads(reduced_colour_image)
