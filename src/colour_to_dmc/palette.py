@@ -7,7 +7,7 @@ from colours import rgb_to_dmc, dmc_threads
 # class Palette:
 #     pass
 
-def closest_dmc_colours(image):
+def closest_unique_dmc_threads(image):
     # flatten the array by concatenating the lists:
     bgr_concat_array = np.concatenate(image, axis=0)
     # return unique B, G, R colour combination of a read_quantized_color_image by:
@@ -19,6 +19,8 @@ def closest_dmc_colours(image):
     # find the closest dmc colour using unique bgr values and dedupe the result
     closest_dmc_threads = [(rgb_to_dmc(c[2], c[1], c[0])) for c in unique_bgr_array]
     unique_dmc_threads = [dict(t) for t in {tuple(d.items()) for d in closest_dmc_threads}]
+    print(unique_dmc_threads)
+    print("", len(unique_dmc_threads))
     return unique_dmc_threads
 
 
