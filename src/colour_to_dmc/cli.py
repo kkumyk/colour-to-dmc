@@ -42,6 +42,5 @@ dmc_threads_found = closest_unique_dmc_threads(reduced_colour_image)
 thread_palette = generate_thread_palette(dmc_threads_found, args.percent, reduced_colour_image)
 
 cv2.imwrite(args.output, reduced_colour_image)
-
 # delete reduced colour image from the folder
 os.remove('reduced_colour_image.png')
