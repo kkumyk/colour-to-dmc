@@ -1,9 +1,8 @@
 import argparse
-from image import check_size_and_quantize
-from palette import closest_dmc_colours, generate_threads_palette
-
 import cv2
-from PIL import Image
+from image import check_size_and_quantize
+from palette import closest_dmc_colours, generate_thread_palette
+
 
 parser = argparse.ArgumentParser(description="Get a DMC colour palette for an image.")
 
@@ -35,11 +34,11 @@ parser.add_argument(
 
 args = parser.parse_args()
 
-# input_image = args.input
-output_image = args.output
-percent_limit = args.percent
-# colour_limit = args.colours
-
 reduced_colour_image = check_size_and_quantize(args.input, args.colours)
+
+reduced_colour_image.save('reduced_colour_image.png')
+reduced_colour_image = cv2.imread('reduced_colour_image.png')
+
 unique_closest_dmc_colours = closest_dmc_colours(reduced_colour_image)
-threads_palette = generate_threads_palette(unique_closest_dmc_colours, args.percent)
+thread_palette = generate_thread_palette(unique_closest_dmc_colours, args.percent, reduced_colour_image, args.output)
+print(thread_palette)

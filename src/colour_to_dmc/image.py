@@ -1,5 +1,4 @@
 import sys
-import cv2
 from PIL import Image
 
 
@@ -16,7 +15,5 @@ def check_size_and_quantize(input_image, colour_limit):
         sys.exit("The provided image is too small.")
     else:
         quantized_image = image_to_quantize.quantize(colour_limit)
-        quantized_image.save('reduced_colour_image.png')
-        reduced_colour_image = cv2.imread('reduced_colour_image.png')
-    return reduced_colour_image
+    return quantized_image
 
