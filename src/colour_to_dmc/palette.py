@@ -16,11 +16,11 @@ def closest_unique_dmc_threads(image):
     bgr_tuple_array = [tuple(row) for row in bgr_concat_array]
     unique_bgr_array = np.unique(bgr_tuple_array, axis=0)
 
-    # find the closest dmc colour using unique bgr values and dedupe the result
+    # find the closest dmc colour using unique bgr values
     closest_dmc_threads = [(rgb_to_dmc(c[2], c[1], c[0])) for c in unique_bgr_array]
+    # dedupe the result
     unique_dmc_threads = [dict(t) for t in {tuple(d.items()) for d in closest_dmc_threads}]
-    print(unique_dmc_threads)
-    print("", len(unique_dmc_threads))
+    print("Total DMC threads found: ", len(unique_dmc_threads))
     return unique_dmc_threads
 
 
