@@ -1,4 +1,4 @@
-import argparse, image
+import argparse
 
 parser = argparse.ArgumentParser(description="Get a DMC colour palette for an image.")
 
@@ -21,7 +21,7 @@ parser.add_argument(
 
 # provide number of colours as an argument
 parser.add_argument(
-    "-n", "--number",
+    "-c", "--colours",
     type=int,
     default=255,
     help="a number to use to reduce the image to the specified nr of colours",
@@ -29,8 +29,8 @@ parser.add_argument(
 )
 
 args = parser.parse_args()
+
 input_image = args.input
 output_image = args.output
-percent = args.percent
-number = args.number
-
+percent_limit = args.percent
+colour_limit = args.colours
