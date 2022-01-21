@@ -1,5 +1,7 @@
 import argparse
 from image import check_size_and_quantize
+from palette import closest_dmc_colours, generate_threads_palette
+
 import cv2
 from PIL import Image
 
@@ -39,4 +41,5 @@ percent_limit = args.percent
 # colour_limit = args.colours
 
 reduced_colour_image = check_size_and_quantize(args.input, args.colours)
-
+unique_closest_dmc_colours = closest_dmc_colours(reduced_colour_image)
+threads_palette = generate_threads_palette(unique_closest_dmc_colours, args.percent)
