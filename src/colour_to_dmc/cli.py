@@ -1,4 +1,7 @@
 import argparse
+from image import check_size_and_quantize
+import cv2
+from PIL import Image
 
 parser = argparse.ArgumentParser(description="Get a DMC colour palette for an image.")
 
@@ -30,7 +33,10 @@ parser.add_argument(
 
 args = parser.parse_args()
 
-input_image = args.input
+# input_image = args.input
 output_image = args.output
 percent_limit = args.percent
-colour_limit = args.colours
+# colour_limit = args.colours
+
+reduced_colour_image = check_size_and_quantize(args.input, args.colours)
+
