@@ -11,9 +11,9 @@ class Palette:
 def closest_unique_dmc_threads(image):
     # flatten the array by concatenating the lists:
     bgr_concat_array = np.concatenate(image, axis=0)
-    # return unique B, G, R colour combination of a read_quantized_color_image by:
-    # 1. turn lists into tuples
-    # 2. use the unique() function to find the unique elements of an array.
+    # return unique B, G, R colour combination of a quantized image by:
+    # 1. turning lists into tuples
+    # 2. using the unique() function to find the unique elements of an array.
     bgr_tuple_array = [tuple(row) for row in bgr_concat_array]
     unique_bgr_array = np.unique(bgr_tuple_array, axis=0)
 
@@ -41,6 +41,7 @@ def closest_unique_dmc_threads(image):
 
 def generate_thread_palette(thread_percentages, percent_limit, image):
     filtered_thread_list = [thread for thread in thread_percentages if thread[1] > percent_limit]
+    # sort threads by percent value
     filtered_thread_list.sort(key=lambda x: x[1], reverse=True)
     print("Filtered DMC thread count:", len(filtered_thread_list))
 
@@ -57,22 +58,23 @@ def generate_thread_palette(thread_percentages, percent_limit, image):
         size += int(h / len(filtered_thread_list))
         filtered_thread_list_to_print.extend(filtered_thread_list)
 
-    dmc_thread_dict = {dmc_thread['floss']: dmc_thread for dmc_thread in dmc_threads}  # csv data saved to dict
-    for idx, color in enumerate(filtered_thread_list_to_print):
+    dmc_thread_dict = {dmc_thread['floss']: dmc_thread for dmc_thread in dmc_threads}
+
+    for idx, colour in enumerate(filtered_thread_list_to_print):
         b, g, r = (
-            dmc_thread_dict[color[0]]["blue"],
-            dmc_thread_dict[color[0]]["green"],
-            dmc_thread_dict[color[0]]["red"]
+            dmc_thread_dict[colour[0]]["blue"],
+            dmc_thread_dict[colour[0]]["green"],
+            dmc_thread_dict[colour[0]]["red"]
         )
 
         cv2.rectangle(
             # thickness: It is the thickness of the rectangle borderline in px.
-            # Thickness of -1 px will fill the rectangle shape by the specified color.
+            # Thickness of -1 px will fill the rectangle shape by the specified colour.
             image, (0, size * idx), (size * 2, (size * idx) + size), (b, g, r), -1)
 
         cv2.putText(
             image,
-            dmc_thread_dict[color[0]]["floss"],
+            dmc_thread_dict[colour[0]]["floss"],
             (0, size * idx + (int(size / 2))),
             cv2.FONT_HERSHEY_SIMPLEX,
             0.4,
