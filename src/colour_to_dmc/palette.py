@@ -16,53 +16,45 @@ def closest_unique_dmc_threads(image):
     bgr_tuple_array = [tuple(row) for row in bgr_concat_array]
     unique_bgr_array = np.unique(bgr_tuple_array, axis=0)
 
-    # find the closest dmc colour using unique bgr values
+    # find the closest dmc threads using unique bgr values == up to specified number of colours in the quantised image.
     closest_dmc_threads = [(rgb_to_dmc(c[2], c[1], c[0])) for c in unique_bgr_array]
+    print("Total DMC thread matches found:", len(closest_dmc_threads))
+
     # dedupe the result
     unique_dmc_threads = [dict(t) for t in {tuple(d.items()) for d in closest_dmc_threads}]
     print("Total unique DMC threads found: ", len(unique_dmc_threads))
-    return unique_dmc_threads
 
-
-def generate_thread_palette(dmc_threads_found, percent_limit, image):
     # get a list of all thread occurrences from the closest_dmc_colours
-    thread_occurrences = [thread_nr['floss'] for thread_nr in dmc_threads_found] # closest_dmc_threads
-    print(thread_occurrences)
+    thread_occurrences = [thread_nr['floss'] for thread_nr in closest_dmc_threads]
     # count thread occurrences found
     thread_counts = Counter(thread_occurrences)
-    #print(thread_counts)
+
     # calculate the percentage use for each thread, save into a list of tuples. e.g.:[('#3371', 1.3157894736842104)]
     thread_percentages = [
-        (i, thread_counts[i] / len(dmc_threads_found) * 100.0)
+        (i, thread_counts[i] / len(closest_dmc_threads) * 100.0)
         for i in thread_counts]
 
-    #print("thread_percentages", thread_percentages)
+    # print("thread_percentages", thread_percentages)
+    return thread_percentages
 
-    #limit_low_occurring_threads = percent_limit
-    filtered_thread_list = [
-        thread for thread in thread_percentages if thread[1] > percent_limit]
 
-    print("filtered_thread_list", len(filtered_thread_list))
-
+def generate_thread_palette(thread_percentages, percent_limit, image):
+    filtered_thread_list = [thread for thread in thread_percentages if thread[1] > percent_limit]
     filtered_thread_list.sort(key=lambda x: x[1], reverse=True)
-    filtered_thread_list_50 = filtered_thread_list[0:50]
-    print("filtered_thread_list_50", len(filtered_thread_list_50))
+    print("Filtered DMC thread count:", len(filtered_thread_list))
+
     h, _, _ = image.shape
     size = 0
-
     filtered_thread_list_to_print = []
 
-    if filtered_thread_list_50:
-        # print(filtered_thread_list_50)
+    if len(filtered_thread_list) > 50:
+        filtered_thread_list_50 = filtered_thread_list[0:50]
+        print("Number of colours to print:", len(filtered_thread_list_50))
         size += int(h / len(filtered_thread_list_50))
         filtered_thread_list_to_print.extend(filtered_thread_list_50)
     else:
-        try:
-            size += int(h / len(filtered_thread_list)) # ZeroDivisionError: division by zero by  python cli.py roses.jpeg -p 2 -c 255
-            filtered_thread_list_to_print.extend(filtered_thread_list)
-        except ZeroDivisionError:
-            print("A ZeroDivisionError occurred.")
-
+        size += int(h / len(filtered_thread_list))
+        filtered_thread_list_to_print.extend(filtered_thread_list)
 
     dmc_thread_dict = {dmc_thread['floss']: dmc_thread for dmc_thread in dmc_threads}  # csv data saved to dict
     for idx, color in enumerate(filtered_thread_list_to_print):
@@ -86,5 +78,3 @@ def generate_thread_palette(dmc_threads_found, percent_limit, image):
             (255 - b, 255 - g, 255 - r),
             1,
         )
-
-
