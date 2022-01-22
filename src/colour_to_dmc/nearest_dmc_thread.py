@@ -26,9 +26,15 @@ for colour in dmc_threads:
     rgb_colours.append((colour["red"], colour["green"], colour["blue"]))
 
 
-# look up the nearest neighbors with k-d tree
 def rgb_to_dmc(r, g, b):
+    """
+    Look up the nearest neighbors with k-d tree.
+    R, G, B values are used to identify the closest DMC thread from the "dmc.csv" file.
+    """
+
     tree = sp.KDTree(rgb_colours)
     # don't need the Euclidean distance only the index
     _, dmc_thread = tree.query((r, g, b))
     return dmc_threads[dmc_thread]
+
+
