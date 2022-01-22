@@ -10,7 +10,7 @@ parser.add_argument("input", help="an input file")
 
 parser.add_argument(
     "-o", "--output",
-    default='palette.jpg',
+    default='dmc_palette.jpg',
     help="an output file",
     required=False
 )

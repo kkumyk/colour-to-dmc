@@ -10,14 +10,12 @@ with open(DMC_CSV, newline="") as csvfile:
         dmc_threads.append(
             {
                 "index": index,
-                "floss": "#" + row["floss#"],
+                "thread": "#" + row["thread#"],
                 "description": row["description"],
                 "red": int(row["red"]),
                 "green": int(row["green"]),
                 "blue": int(row["blue"]),
-                "hex": "#" + row["hex"],
-                "dmc_row": row["row"],
-                "prim_sec_ter": row["prim-sec-ter"]
+                "dmc_row": row["row"]
             }
         )
 

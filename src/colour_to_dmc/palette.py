@@ -36,7 +36,7 @@ def find_and_filter_dmc_threads(image):
     print("Total unique DMC threads: ", len(unique_dmc_threads))
 
     # get a list of all thread occurrences from the closest_dmc_colours
-    thread_occurrences = [thread_nr['floss'] for thread_nr in closest_dmc_threads]
+    thread_occurrences = [thread_nr['thread'] for thread_nr in closest_dmc_threads]
     # count thread occurrences found
     thread_counts = Counter(thread_occurrences)
 
@@ -81,7 +81,7 @@ def print_thread_palette(threads_to_print, image):
     :return: an image with the thread palette printed onto it.
     """
 
-    dmc_thread_dict = {dmc_thread['floss']: dmc_thread for dmc_thread in dmc_threads}
+    dmc_thread_dict = {dmc_thread['thread']: dmc_thread for dmc_thread in dmc_threads}
 
     for idx, colour in enumerate(threads_to_print):
         b, g, r = (
@@ -99,7 +99,7 @@ def print_thread_palette(threads_to_print, image):
 
         cv2.putText(
             image,
-            dmc_thread_dict[colour[0]]["floss"],
+            dmc_thread_dict[colour[0]]["thread"],
             (0, size * idx + (int(size / 2))),
             cv2.FONT_HERSHEY_SIMPLEX,
             0.4,
