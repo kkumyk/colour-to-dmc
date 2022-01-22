@@ -4,10 +4,6 @@ from collections import Counter
 from nearest_dmc_thread import rgb_to_dmc, dmc_threads
 
 
-class Palette:
-    pass
-
-
 def closest_unique_dmc_threads(image):
     # flatten the array by concatenating the lists:
     bgr_concat_array = np.concatenate(image, axis=0)
