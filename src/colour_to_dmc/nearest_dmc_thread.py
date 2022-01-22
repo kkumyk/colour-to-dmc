@@ -36,5 +36,3 @@ def rgb_to_dmc(r, g, b):
     # don't need the Euclidean distance only the index
     _, dmc_thread = tree.query((r, g, b))
     return dmc_threads[dmc_thread]
-
-
