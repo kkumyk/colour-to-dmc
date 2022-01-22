@@ -25,9 +25,6 @@ rgb_colours = []
 for colour in dmc_threads:
     rgb_colours.append((colour["red"], colour["green"], colour["blue"]))
 
-# print(dmc_threads)
-# print(rgb_colours)
-
 
 # look up the nearest neighbors with k-d tree
 def rgb_to_dmc(r, g, b):
@@ -35,5 +32,3 @@ def rgb_to_dmc(r, g, b):
     # don't need the Euclidean distance only the index
     _, dmc_thread = tree.query((r, g, b))
     return dmc_threads[dmc_thread]
-
-# print(rgb_to_dmc(241, 195, 107))

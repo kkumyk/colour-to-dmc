@@ -1,11 +1,12 @@
 import cv2
 import numpy as np
 from collections import Counter
-from colours import rgb_to_dmc, dmc_threads
+from nearest_dmc_thread import rgb_to_dmc, dmc_threads
 
 
-# class Palette:
-#     pass
+class Palette:
+    pass
+
 
 def closest_unique_dmc_threads(image):
     # flatten the array by concatenating the lists:
