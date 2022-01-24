@@ -10,8 +10,9 @@ def check_size_and_quantize(input_image, colour_limit):
     Else, it quantizes the image.
     """
     image_to_quantize = Image.open(input_image)
+    file_format = image_to_quantize.format
 
-    if image_to_quantize.format == 'JPEG' or image_to_quantize.format == 'PNG':
+    if file_format == 'JPEG' or file_format == 'PNG':
         width, height = image_to_quantize.size
 
         if width < 1000 or height < 1100:
