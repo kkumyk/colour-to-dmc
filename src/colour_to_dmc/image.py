@@ -22,6 +22,7 @@ def check_size_and_quantize(input_image, colour_limit):
         else:
             # add check for colour_limit
             quantized_image = image_to_quantize.quantize(colour_limit)
+            print(type(quantized_image))
         return quantized_image
 
     else:
