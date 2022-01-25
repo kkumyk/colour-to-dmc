@@ -15,7 +15,7 @@ def check_size_and_quantize(input_image, colour_limit):
 
     elif colour_limit > 255:
         print("Please choose the number of colours to use in the image. It should between 1 and 255.")
-        sys.exit("The given number is too big.")
+        sys.exit("The given number is too large.")
 
     else:
 
