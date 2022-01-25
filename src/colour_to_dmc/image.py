@@ -22,9 +22,8 @@ def check_size_and_quantize(input_image, colour_limit):
         else:
             # add check for colour_limit
             quantized_image = image_to_quantize.quantize(colour_limit)
-            print(type(quantized_image))
         return quantized_image
 
     else:
         print("Please provide a valid image in one of the following formats: PNG or JPEG.")
-        sys.exit("The provided image is of the following format: " + image_to_quantize.format)
+        sys.exit("The provided image should be in PNG or JPEG format.")
