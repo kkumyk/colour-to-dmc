@@ -19,6 +19,7 @@ with open(DMC_CSV, newline="") as csvfile:
             }
         )
 
+
 rgb_colours = []
 for colour in dmc_threads:
     rgb_colours.append((colour["red"], colour["green"], colour["blue"]))
@@ -33,4 +34,5 @@ def rgb_to_dmc(r, g, b):
     tree = sp.KDTree(rgb_colours)
     # don't need the Euclidean distance only the index
     _, dmc_thread = tree.query((r, g, b))
+    print(dmc_threads[dmc_thread])
     return dmc_threads[dmc_thread]
