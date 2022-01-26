@@ -34,5 +34,5 @@ def rgb_to_dmc(r, g, b):
     tree = sp.KDTree(rgb_colours)
     # don't need the Euclidean distance only the index
     _, dmc_thread = tree.query((r, g, b))
-    print(dmc_threads[dmc_thread])
     return dmc_threads[dmc_thread]
+

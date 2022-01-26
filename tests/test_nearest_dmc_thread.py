@@ -6,10 +6,10 @@ class TestNearestDMCThread:
         assert len(nearest_dmc_thread.dmc_threads) != 0
 
     def test_find_nearest_thread(self):
-        # try an exact color
+        # try thread with the exact RGB colour combination
         black = nearest_dmc_thread.rgb_to_dmc(0, 0, 0)
         assert black["thread"] == "#310"
 
-        # # try a near color
-        # not_quite_light_salmon = nearest_dmc_thread.rgb_to_dmc(254, 200, 201)
-        # self.assertEqual(not_quite_light_salmon["floss"], "#761")
+        # try thread with the near RGB colour combination
+        not_quite_dark_lavender = nearest_dmc_thread.rgb_to_dmc(165, 125, 161)
+        assert not_quite_dark_lavender["thread"] == "#209"
