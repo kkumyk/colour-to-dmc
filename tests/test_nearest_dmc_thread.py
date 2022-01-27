@@ -1,5 +1,4 @@
-from colour_to_dmc import nearest_dmc_thread
-
+import nearest_dmc_thread
 
 class TestNearestDMCThread:
     def test_loading_threads_csv(self):

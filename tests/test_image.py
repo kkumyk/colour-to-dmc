@@ -1,4 +1,4 @@
-from colour_to_dmc.image import check_size_and_quantize
+from src.image import check_size_and_quantize
 import pytest
 
 
