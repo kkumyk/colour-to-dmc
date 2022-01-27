@@ -5,7 +5,6 @@ from image import check_size_and_quantize
 from palette import find_and_filter_dmc_threads, generate_thread_palette, print_thread_palette
 
 parser = argparse.ArgumentParser(description="Get a DMC colour palette for an image.")
-
 parser.add_argument("input", help="an input file")
 
 parser.add_argument(
@@ -42,6 +41,7 @@ dmc_threads_found = find_and_filter_dmc_threads(reduced_colour_image)
 thread_palette = generate_thread_palette(dmc_threads_found, args.percent)
 image_with_palette = print_thread_palette(thread_palette, reduced_colour_image)
 
-cv2.imwrite(args.output, image_with_palette)
+cv2.imwrite(args.input.partition('.')[0] + '_' + args.output, image_with_palette)
+
 # delete reduced colour image from the folder
 os.remove('reduced_colour_image.png')
