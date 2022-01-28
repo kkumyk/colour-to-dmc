@@ -40,3 +40,9 @@ optional arguments:
                         a number to use to reduce the image to the specified nr of colours
 
 ```
+# Limitations
+The input image should be at least 1000px in height.
+
+
+# License
+MIT
