@@ -30,7 +30,7 @@ def test_check_size_and_quantize_incorrect_format(expected_exception, input_imag
 
 @pytest.mark.parametrize("expected_exception, input_image, colour_limit",
                          [(SystemExit, 'test_images/roses.jpeg', -5)])
-def test_check_size_and_quantize_incorrect_format(expected_exception, input_image, colour_limit):
+def test_check_size_and_quantize_incorrect_colour_limit(expected_exception, input_image, colour_limit):
     with pytest.raises(SystemExit) as e:
         check_size_and_quantize(input_image, colour_limit)
     assert e.type == SystemExit
@@ -39,7 +39,7 @@ def test_check_size_and_quantize_incorrect_format(expected_exception, input_imag
 
 @pytest.mark.parametrize("expected_exception, input_image, colour_limit",
                          [(SystemExit, 'test_images/roses.jpeg', 555)])
-def test_check_size_and_quantize_incorrect_format(expected_exception, input_image, colour_limit):
+def test_check_size_and_quantize_incorrect_colour_limit(expected_exception, input_image, colour_limit):
     with pytest.raises(SystemExit) as e:
         check_size_and_quantize(input_image, colour_limit)
     assert e.type == SystemExit
