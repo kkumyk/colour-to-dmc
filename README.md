@@ -14,3 +14,11 @@ It's assumed that the user won't be using more than 50 threads to work on. There
 
 <img src="https://github.com/kkumykova/colour_to_dmc/blob/master/examples/roses_dmc_palette.jpg" data-canonical-src="https://github.com/kkumykova/colour_to_dmc/blob/master/examples/roses_dmc_palette.jpg" width="400" />
 
+# Usage
+
+Tested with Python 3.8.
+
+```
+pip install -r requirements.txt
+```
+
