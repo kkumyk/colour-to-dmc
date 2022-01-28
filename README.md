@@ -21,4 +21,22 @@ Tested with Python 3.8.
 ```
 pip install -r requirements.txt
 ```
+```
+$ python cli.py  -h
+usage: cli.py [-h] [-o OUTPUT] [-p PERCENT] [-c COLOURS] input
 
+Get a DMC colour palette for an image.
+
+positional arguments:
+  input                 an input file
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -o OUTPUT, --output OUTPUT
+                        an output file
+  -p PERCENT, --percent PERCENT
+                        percent number to use for filtering identified colours
+  -c COLOURS, --colours COLOURS
+                        a number to use to reduce the image to the specified nr of colours
+
+```
