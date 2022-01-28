@@ -4,7 +4,7 @@ A CLI tool to translate image colours to closest DMC threads.
 
 To find the colours, the image is quantized and then the nearest colour is looked up from a table of DMC colour threads.
 
-The identified thread numbers will be returned added to the quantized image.
+The identified thread numbers will be returned and added to the quantized image.
 
 The user can specify the number of colours to reduce the image to before looking up the threads.
 
@@ -46,3 +46,9 @@ The input image should be at least 1000px in height.
 
 # License
 MIT
+
+# Thanks
+This is a Python learning project and was inspired by the embroidery-vision tool written by @healeycodes. Some of the code and the csv file were used from his project.
+
+
+
