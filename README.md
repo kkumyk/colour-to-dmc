@@ -1,4 +1,4 @@
-# Colour to DMC Thread
+# Colours to DMC Threads
 
 A CLI tool to translate image colours to closest DMC threads.
 
